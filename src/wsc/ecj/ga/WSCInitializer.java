@@ -89,6 +89,7 @@ public class WSCInitializer extends SimpleInitializer {
 	public static final double SILVER = 0.5;
 	public static final double GOLD = 0.75;
 	public static final double PLATINUM = 1;
+	public static final double LIMIT = -10000000000.0;
 
 	// data
 	public static WSCRandom random;
