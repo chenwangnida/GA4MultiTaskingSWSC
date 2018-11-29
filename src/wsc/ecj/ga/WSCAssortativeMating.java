@@ -106,6 +106,27 @@ public class WSCAssortativeMating extends BreedingPipeline {
 				t1.genome = newGenome1;
 				t2.genome = newGenome2;
 
+				// Vertical Cultural Transmission via Selective Imitation
+
+				int pa_skillFactor = t1.getSkillFactor();
+				int pb_skillFactor = t2.getSkillFactor();
+
+				double rand4Imitation = init.random.nextDouble();
+
+				if (rand4Imitation < 0.5) {
+					t1.setSkillFactor(pa_skillFactor);
+				} else {
+					t1.setSkillFactor(pb_skillFactor);
+				}
+
+				double rand4Imitation2 = init.random.nextDouble();
+
+				if (rand4Imitation2 < 0.5) {
+					t2.setSkillFactor(pa_skillFactor);
+				} else {
+					t2.setSkillFactor(pb_skillFactor);
+				}
+
 				inds[q] = t1;
 				inds[q].evaluated = false;
 
@@ -139,6 +160,16 @@ public class WSCAssortativeMating extends BreedingPipeline {
 					indexB_ = init.random.nextInt(t2.genome.length);
 
 				swapServices(t2.genome, indexA_, indexB_);
+				
+				
+				
+				// Vertical Cultural Transmission via Selective Imitation
+
+				int pa_skillFactor = t1.getSkillFactor();
+				int pb_skillFactor = t2.getSkillFactor();
+				
+				t1.setSkillFactor(pa_skillFactor);
+				t2.setSkillFactor(pb_skillFactor);
 
 				inds[q] = t1;
 				inds[q].evaluated = false;

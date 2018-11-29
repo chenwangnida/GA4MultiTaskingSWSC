@@ -84,7 +84,7 @@ public class WSCInitializer extends SimpleInitializer {
 
 	// multi-tasks
     public static List<Task> tasks = new ArrayList<>();
-	public static final int TaskNum = 4;
+	public static int TaskNum = 0;
 	public static final double BRONZE = 0.25;
 	public static final double SILVER = 0.5;
 	public static final double GOLD = 0.75;
@@ -180,6 +180,8 @@ public class WSCInitializer extends SimpleInitializer {
 		tasks.add(new SilverSWSC());
 		tasks.add(new GoldSWSC());
 		tasks.add(new PlatinumSWSC());
+		
+		TaskNum =  tasks.size();
 
 		// Set size of genome
 		Parameter genomeSizeParam = new Parameter("pop.subpop.0.species.genome-size");
