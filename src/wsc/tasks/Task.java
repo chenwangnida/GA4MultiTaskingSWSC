@@ -9,11 +9,6 @@ import wsc.ecj.ga.WSCInitializer;
 import wsc.graph.ServiceEdge;
 
 abstract public class Task {
-	public abstract double calculateSequenceFitness(Service[] sequence, WSCInitializer init, EvolutionState state, SequenceVectorIndividual ind2);
-
-	public abstract void aggregationAttribute(SequenceVectorIndividual individual,
-			DefaultDirectedWeightedGraph<String, ServiceEdge> directedGraph);
-
-	public abstract double calculateFitness(SequenceVectorIndividual individual);
+	public abstract double calculateFitness4Tasks (SequenceVectorIndividual individual, WSCInitializer init);
 
 }

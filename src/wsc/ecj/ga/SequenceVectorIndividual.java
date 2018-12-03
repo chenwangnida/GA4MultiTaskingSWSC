@@ -33,8 +33,10 @@ public class SequenceVectorIndividual extends VectorIndividual {
 	List<Integer> factorial_rank;
 	private double scalarFitness;
 	private int skillFactor;
-	private List<Double> fitnessTask;
-
+	private double fitnessVal; // fitness value before penalizing violation of constrains
+	private List<Double> fitnessTask; // fitness values after before penalizing violation of constrains for each task
+	
+	private double fitness_semantic;  //MT+SIM with range (0,1]
 
 	public double getAvailability() {
 		return availability;
@@ -100,7 +102,6 @@ public class SequenceVectorIndividual extends VectorIndividual {
 		this.relevantList = relevantList;
 	}
 
-
 	public List<Integer> getFactorial_rank() {
 		return factorial_rank;
 	}
@@ -131,6 +132,23 @@ public class SequenceVectorIndividual extends VectorIndividual {
 
 	public void setFitnessTask(List<Double> fitnessTask) {
 		this.fitnessTask = fitnessTask;
+	}
+
+	public double getFitnessVal() {
+		return fitnessVal;
+	}
+
+	public void setFitnessVal(double fitnessVal) {
+		this.fitnessVal = fitnessVal;
+	}
+
+	
+	public double getFitness_semantic() {
+		return fitness_semantic;
+	}
+
+	public void setFitness_semantic(double fitness_semantic) {
+		this.fitness_semantic = fitness_semantic;
 	}
 
 	@Override
@@ -213,7 +231,9 @@ public class SequenceVectorIndividual extends VectorIndividual {
 		init.eval.aggregationAttribute(this, graph);
 		double f = init.eval.calculateFitness(this);
 		// set fitness to individual
-		((SimpleFitness) fitness).setFitness(state, f, false); // XXX Move this inside the other one
+		this.setFitnessVal(f);
+
+//		((SimpleFitness) fitness).setFitness(state, f, false); // XXX Move this inside the other one
 		this.evaluated = true;
 
 	}

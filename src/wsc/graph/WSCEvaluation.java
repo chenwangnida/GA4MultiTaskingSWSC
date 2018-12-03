@@ -16,7 +16,8 @@ import wsc.graph.ServiceEdge;
 
 public class WSCEvaluation {
 
-	public void aggregationAttribute(SequenceVectorIndividual individual, DefaultDirectedWeightedGraph<String, ServiceEdge> directedGraph) {
+	public void aggregationAttribute(SequenceVectorIndividual individual,
+			DefaultDirectedWeightedGraph<String, ServiceEdge> directedGraph) {
 
 		double a = 1.0;
 		double r = 1.0;
@@ -75,8 +76,12 @@ public class WSCEvaluation {
 		t = normaliseTime(t);
 		c = normaliseCost(c);
 
- 		double fitness = ((WSCInitializer.w1 * mt) + (WSCInitializer.w2 * dst) + (WSCInitializer.w3 * a)
+		double fitness = ((WSCInitializer.w1 * mt) + (WSCInitializer.w2 * dst) + (WSCInitializer.w3 * a)
 				+ (WSCInitializer.w4 * r) + (WSCInitializer.w5 * t) + (WSCInitializer.w6 * c));
+
+		// calculate the semantic matchmaking quality for constrains checking
+		double fitness_semantic = 0.5 * mt + 0.5 * dst;
+		individual.setFitness_semantic(fitness_semantic);
 
 		return fitness;
 	}
@@ -126,8 +131,7 @@ public class WSCEvaluation {
 		else
 			return (WSCInitializer.MAXIMUM_COST - cost) / (WSCInitializer.MAXIMUM_COST - WSCInitializer.MINIMUM_COST);
 	}
-	
-	
+
 	public double getLongestPathVertexListUsingBellmanFordShortestPath(
 			DefaultDirectedWeightedGraph<String, ServiceEdge> g, Map<String, double[]> serQoSMap) {
 		// A algorithm to find all paths

@@ -73,26 +73,22 @@ public class GraphStatistics extends SimpleShortStatistics {
 		WSCInitializer init = (WSCInitializer) state.initializer;
 		ArrayList<SequenceVectorIndividual> bestSolution = new ArrayList<SequenceVectorIndividual>();
 
-		if (state.generation == 0) {
+		updateRankPopulation(state, init);
 
-			updateRankPopulation(state, init);
+		// initial random best solutions
+		for (int i = 0; i < init.TaskNum; i++)
+			bestSolution.add((SequenceVectorIndividual) state.population.subpops[0].individuals[i]);
 
-			// initial random best solutions
-			for (int i = 0; i < init.TaskNum; i++)
-				bestSolution.add((SequenceVectorIndividual) state.population.subpops[0].individuals[i]);
-
-			// update valid best solutions
-			for (int ii = 0; ii < init.TaskNum; ii++) {
-				SequenceVectorIndividual ind = getIndividualBestOfTask(ii, state.population.subpops[0].individuals);
-				if (bestSolution.get(ii).getFitnessTask().get(ii) < ind.getFitnessTask().get(ii)) {
-					bestSolution.set(ii, ind);
-				}
-
-				System.out.println("Generation:"+state.generation + ii + ": " + ind.getFitnessTask());
+		// update valid best solutions
+		for (int ii = 0; ii < init.TaskNum; ii++) {
+			SequenceVectorIndividual ind = getIndividualBestOfTask(ii, state.population.subpops[0].individuals);
+			if (bestSolution.get(ii).getFitnessTask().get(ii) < ind.getFitnessTask().get(ii)) {
+				bestSolution.set(ii, ind);
 			}
 
+			System.out.println("Generation:" + state.generation + ii + ": " + ind.getFitnessTask());
 		}
-		
+
 //		
 //		
 //		
@@ -271,7 +267,7 @@ public class GraphStatistics extends SimpleShortStatistics {
 		SequenceVectorIndividual best = null;
 		for (Individual individual : individuals)
 			if (((SequenceVectorIndividual) individual).factorial_rank.get(task) == 1)
-				best = (SequenceVectorIndividual)individual;
+				best = (SequenceVectorIndividual) individual;
 		return best;
 	}
 }

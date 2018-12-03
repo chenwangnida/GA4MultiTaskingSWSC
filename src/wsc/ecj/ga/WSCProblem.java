@@ -13,11 +13,6 @@ public class WSCProblem extends Problem implements SimpleProblemForm {
 
 	public void evaluate(final EvolutionState state, final Individual ind, final int subpopulation,
 			final int threadnum) {
-		
-		
-		// remove it ?
-//		if (ind.evaluated)
-//			return;
 
 		if (!(ind instanceof SequenceVectorIndividual))
 			state.output.fatal("Whoa!  It's not a SequenceVectorIndividual!!!", null);
@@ -25,39 +20,35 @@ public class WSCProblem extends Problem implements SimpleProblemForm {
 		SequenceVectorIndividual ind2 = (SequenceVectorIndividual) ind;
 		WSCInitializer init = (WSCInitializer) state.initializer;
 
-		if (!(ind2.fitness instanceof SimpleFitness))
-			state.output.fatal("Whoa!  It's not a SimpleFitness!!!", null);
+		if (!ind2.evaluated) {
+			ind2.calculateSequenceFitness(ind2.genome, init, state);
+		}
 
-		ArrayList<Double> fitnessTa = new ArrayList<>();
+//		if (!(ind2.fitness instanceof SimpleFitness))
+//			state.output.fatal("Whoa!  It's not a SimpleFitness!!!", null);
 
+		// compute the fitness for the first generation
 		if (state.generation == 0) {
+			ArrayList<Double> fitnessTa = new ArrayList<>();
+
 			for (Task task : init.tasks) {
-				fitnessTa.add(task.calculateSequenceFitness(ind2.genome, init, state, ind2));
+				fitnessTa.add(task.calculateFitness4Tasks(ind2, init));
+			}
+			ind2.setFitnessTask(fitnessTa);
+		}
+
+		// re-compute the fitness
+		if (state.generation > 0) {
+			List<Double> ft = ind2.getFitnessTask();
+			for (int j = 0; j < init.TaskNum; j++) {
+				if (ft.get(subpopulation) == init.LIMIT) {
+					Task t = init.tasks.get(j);
+					ft.set(j, t.calculateFitness4Tasks(ind2, init));
+				}
+
 			}
 		}
 
-//		if (state.generation > 0) {
-//			for (int i = 0; i < init.TaskNum; i++)
-//				if (i != ind2.getSkillFactor())
-//					fitnessTa.add(init.LIMIT);
-//				else
-//					fitnessTa.add(init.tasks.get(i).calculateSequenceFitness(ind2.genome, init, state, ind2));
-//		}
-
-		ind2.setFitnessTask(fitnessTa);
-
-	}
-	
-	
-	private void reComputeFitnessTaskForChild(List<Individual> children) {
-		for (Individual child : children) {
-			List<Double> fT = child.getFitnessTask();
-			for (int j = 0; j < tasks.size(); j++)
-				if (fT.get(j) == LIMIT) {
-					Task t = tasks.get(j);
-					fT.set(j, t.computeFitness(child.gen));
-				}
-		}
 	}
 
 }
