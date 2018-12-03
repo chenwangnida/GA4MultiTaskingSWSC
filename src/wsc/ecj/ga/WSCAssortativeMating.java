@@ -59,208 +59,214 @@ public class WSCAssortativeMating extends BreedingPipeline {
 							+ subpopulation + " and it's:" + inds2[0]);
 
 		int nMin = Math.min(n1, n2);
-
 		double rand = init.random.nextDouble();
-		if (rand < init.matingProbability) {
-			// Perform crossover
-			for (int q = start, x = 0; q < nMin + start; q++, x++) {
-				SequenceVectorIndividual t1 = ((SequenceVectorIndividual) inds1[x]);
-				SequenceVectorIndividual t2 = ((SequenceVectorIndividual) inds2[x]);
 
-				// Select two random index numbers as the boundaries for the crossover section
-				int indexA = init.random.nextInt(t1.genome.length);
-				int indexB = init.random.nextInt(t1.genome.length);
+		for (int q = start, x = 0; q < nMin + start; q++, x++) {
+			SequenceVectorIndividual t1 = ((SequenceVectorIndividual) inds1[x]);
+			SequenceVectorIndividual t2 = ((SequenceVectorIndividual) inds2[x]);
+			if ((t1.getSkillFactor() == t2.getSkillFactor()) || (rand < init.matingProbability)) { // Perform crossover
 
-				// Make sure they are different
-				while (indexA == indexB)
-					indexB = init.random.nextInt(t1.genome.length);
+				crossover(q, init, state, inds, t1, t2);
 
-				// Determine which boundary they are
-				int minBoundary = Math.min(indexA, indexB);
-				int maxBoundary = Math.max(indexA, indexB);
+			} else { // Perform mutation
 
-				// Create new genomes
-				Service[] newGenome1 = new Service[t1.genome.length];
-				Service[] newGenome2 = new Service[t2.genome.length];
-
-				// Swap crossover sections between candidates, keeping track of which services
-				// are in each section
-				Set<Service> newSection1 = new HashSet<Service>();
-				Set<Service> newSection2 = new HashSet<Service>();
-
-				for (int index = minBoundary; index <= maxBoundary; index++) {
-					// Copy section from parent 1 to genome 2
-					newGenome2[index] = t1.genome[index];
-					newSection2.add(t1.genome[index]);
-
-					// Copy section from parent 2 to genome 1
-					newGenome1[index] = t2.genome[index];
-					newSection1.add(t2.genome[index]);
-				}
-
-				// Now fill the remainder of the new genomes, making sure not to duplicate any
-				// services
-				fillNewGenome(t2, newGenome2, newSection2, minBoundary, maxBoundary);
-				fillNewGenome(t1, newGenome1, newSection1, minBoundary, maxBoundary);
-
-				// Replace the old genomes with the new ones
-				t1.genome = newGenome1;
-				t2.genome = newGenome2;
-
-				// Vertical Cultural Transmission via Selective Imitation
-
-				int pa_skillFactor = t1.getSkillFactor();
-				int pb_skillFactor = t2.getSkillFactor();
-
-				double rand4Imitation = init.random.nextDouble();
-
-				if (rand4Imitation < 0.5) {
-					t1.setSkillFactor(pa_skillFactor);
-				} else {
-					t1.setSkillFactor(pb_skillFactor);
-				}
-
-				double rand4Imitation2 = init.random.nextDouble();
-
-				if (rand4Imitation2 < 0.5) {
-					t2.setSkillFactor(pa_skillFactor);
-				} else {
-					t2.setSkillFactor(pb_skillFactor);
-				}
-
-				// Set factor rank to the worst one (Highest value)
-				ArrayList<Integer> fR = new ArrayList<>();
-				for (int i = 0; i < init.TaskNum; i++)
-					fR.add(state.population.subpops[0].individuals.length + 1);
-
-				t1.setFactorial_rank(fR);
-				t2.setFactorial_rank(fR);
-
-				// Set fitness of t1 and t2 for the task
-				ArrayList<Double> fitnessTa = new ArrayList<>();
-
-				if (state.generation > 0) {
-					t1.calculateSequenceFitness(t1.genome, init, state);
-					t1.evaluated = true;
-
-					for (int i = 0; i < init.TaskNum; i++)
-						if (i != t1.getSkillFactor())
-							fitnessTa.add(init.LIMIT);
-						else
-							fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
-				}
-
-				t1.setFitnessTask(fitnessTa);
-
-				fitnessTa = new ArrayList<>();
-
-				if (state.generation > 0) {
-					t2.calculateSequenceFitness(t2.genome, init, state);
-					t2.evaluated = true;
-
-					for (int i = 0; i < init.TaskNum; i++)
-						if (i != t2.getSkillFactor())
-							fitnessTa.add(init.LIMIT);
-						else
-							fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
-				}
-
-				t2.setFitnessTask(fitnessTa);
-
-				// update subpop with new individuals
-				inds[q] = t1;
-//				inds[q].evaluated = false;
-
-				if (q + 1 < inds.length) {
-					inds[q + 1] = t2;
-//					inds[q + 1].evaluated = false;
-				}
-			}
-
-		} else {
-			// perform mutation
-
-			for (int q = start, x = 0; q < nMin + start; q++, x++) {
-
-				// mutate the first one
-				SequenceVectorIndividual t1 = ((SequenceVectorIndividual) inds1[x]);
-
-				int indexA = init.random.nextInt(t1.genome.length);
-				int indexB = init.random.nextInt(t1.genome.length);
-				while (indexA == indexB)
-					indexB = init.random.nextInt(t1.genome.length);
-
-				swapServices(t1.genome, indexA, indexB);
-
-				// mutate the first one
-				SequenceVectorIndividual t2 = ((SequenceVectorIndividual) inds2[x]);
-
-				int indexA_ = init.random.nextInt(t2.genome.length);
-				int indexB_ = init.random.nextInt(t2.genome.length);
-				while (indexA_ == indexB_)
-					indexB_ = init.random.nextInt(t2.genome.length);
-
-				swapServices(t2.genome, indexA_, indexB_);
-
-				// Vertical Cultural Transmission via Selective Imitation
-
-				int pa_skillFactor = t1.getSkillFactor();
-				int pb_skillFactor = t2.getSkillFactor();
-
-				t1.setSkillFactor(pa_skillFactor);
-				t2.setSkillFactor(pb_skillFactor);
-
-				// Set factor rank to the worst one (Highest value)
-				ArrayList<Integer> fR = new ArrayList<>();
-				for (int i = 0; i < init.TaskNum; i++)
-					fR.add(state.population.subpops[0].individuals.length + 1);
-
-				t1.setFactorial_rank(fR);
-				t2.setFactorial_rank(fR);
-
-				// Set fitness of t1 and t2 for the task
-				ArrayList<Double> fitnessTa = new ArrayList<>();
-
-				if (state.generation > 0) {
-					t1.calculateSequenceFitness(t1.genome, init, state);
-					t1.evaluated = true;
-
-					for (int i = 0; i < init.TaskNum; i++)
-						if (i != t1.getSkillFactor())
-							fitnessTa.add(init.LIMIT);
-						else
-							fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
-				}
-
-				t1.setFitnessTask(fitnessTa);
-
-				fitnessTa = new ArrayList<>();
-
-				if (state.generation > 0) {
-					t2.calculateSequenceFitness(t2.genome, init, state);
-					t2.evaluated = true;
-
-					for (int i = 0; i < init.TaskNum; i++)
-						if (i != t2.getSkillFactor())
-							fitnessTa.add(init.LIMIT);
-						else
-							fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
-				}
-
-				t2.setFitnessTask(fitnessTa);
-
-				// update subpop with new individuals
-				inds[q] = t1;
-				inds[q].evaluated = true;
-
-				if (q + 1 < inds.length) {
-					inds[q + 1] = t2;
-					inds[q + 1].evaluated = true;
-				}
+				mutation(q, init, state, inds, t1, t2);
 			}
 		}
 
 		return n1;
+	}
+
+	private void mutation(int q, WSCInitializer init, EvolutionState state, Individual[] inds,
+			SequenceVectorIndividual t1, SequenceVectorIndividual t2) {
+
+		// mutate the first one
+
+		int indexA = init.random.nextInt(t1.genome.length);
+		int indexB = init.random.nextInt(t1.genome.length);
+		while (indexA == indexB)
+			indexB = init.random.nextInt(t1.genome.length);
+
+		swapServices(t1.genome, indexA, indexB);
+
+		// mutate the first one
+
+		int indexA_ = init.random.nextInt(t2.genome.length);
+		int indexB_ = init.random.nextInt(t2.genome.length);
+		while (indexA_ == indexB_)
+			indexB_ = init.random.nextInt(t2.genome.length);
+
+		swapServices(t2.genome, indexA_, indexB_);
+
+		// Vertical Cultural Transmission via Selective Imitation
+
+		int pa_skillFactor = t1.getSkillFactor();
+		int pb_skillFactor = t2.getSkillFactor();
+
+		t1.setSkillFactor(pa_skillFactor);
+		t2.setSkillFactor(pb_skillFactor);
+
+		// Set factor rank to the worst one (Highest value)
+		ArrayList<Integer> fR = new ArrayList<>();
+		for (int i = 0; i < init.TaskNum; i++)
+			fR.add(state.population.subpops[0].individuals.length + 1);
+
+		t1.setFactorial_rank(fR);
+		t2.setFactorial_rank(fR);
+
+		// Set fitness of t1 and t2 for the task
+		ArrayList<Double> fitnessTa = new ArrayList<>();
+
+		if (state.generation > 0) {
+			t1.calculateSequenceFitness(t1.genome, init, state);
+			t1.evaluated = true;
+
+			for (int i = 0; i < init.TaskNum; i++)
+				if (i != t1.getSkillFactor())
+					fitnessTa.add(init.LIMIT);
+				else
+					fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
+		}
+
+		t1.setFitnessTask(fitnessTa);
+
+		fitnessTa = new ArrayList<>();
+
+		if (state.generation > 0) {
+			t2.calculateSequenceFitness(t2.genome, init, state);
+			t2.evaluated = true;
+
+			for (int i = 0; i < init.TaskNum; i++)
+				if (i != t2.getSkillFactor())
+					fitnessTa.add(init.LIMIT);
+				else
+					fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
+		}
+
+		t2.setFitnessTask(fitnessTa);
+
+		// update subpop with new individuals
+		inds[q] = t1;
+		inds[q].evaluated = true;
+
+		if (q + 1 < inds.length) {
+			inds[q + 1] = t2;
+			inds[q + 1].evaluated = true;
+		}
+	}
+
+	private void crossover(int q, WSCInitializer init, EvolutionState state, Individual[] inds,
+			SequenceVectorIndividual t1, SequenceVectorIndividual t2) {
+
+		// Select two random index numbers as the boundaries for the crossover section
+		int indexA = init.random.nextInt(t1.genome.length);
+		int indexB = init.random.nextInt(t1.genome.length);
+
+		// Make sure they are different
+		while (indexA == indexB)
+			indexB = init.random.nextInt(t1.genome.length);
+
+		// Determine which boundary they are
+		int minBoundary = Math.min(indexA, indexB);
+		int maxBoundary = Math.max(indexA, indexB);
+
+		// Create new genomes
+		Service[] newGenome1 = new Service[t1.genome.length];
+		Service[] newGenome2 = new Service[t2.genome.length];
+
+		// Swap crossover sections between candidates, keeping track of which services
+		// are in each section
+		Set<Service> newSection1 = new HashSet<Service>();
+		Set<Service> newSection2 = new HashSet<Service>();
+
+		for (int index = minBoundary; index <= maxBoundary; index++) {
+			// Copy section from parent 1 to genome 2
+			newGenome2[index] = t1.genome[index];
+			newSection2.add(t1.genome[index]);
+
+			// Copy section from parent 2 to genome 1
+			newGenome1[index] = t2.genome[index];
+			newSection1.add(t2.genome[index]);
+		}
+
+		// Now fill the remainder of the new genomes, making sure not to duplicate any
+		// services
+		fillNewGenome(t2, newGenome2, newSection2, minBoundary, maxBoundary);
+		fillNewGenome(t1, newGenome1, newSection1, minBoundary, maxBoundary);
+
+		// Replace the old genomes with the new ones
+		t1.genome = newGenome1;
+		t2.genome = newGenome2;
+
+		// Vertical Cultural Transmission via Selective Imitation
+
+		int pa_skillFactor = t1.getSkillFactor();
+		int pb_skillFactor = t2.getSkillFactor();
+
+		double rand4Imitation = init.random.nextDouble();
+
+		if (rand4Imitation < 0.5) {
+			t1.setSkillFactor(pa_skillFactor);
+		} else {
+			t1.setSkillFactor(pb_skillFactor);
+		}
+
+		double rand4Imitation2 = init.random.nextDouble();
+
+		if (rand4Imitation2 < 0.5) {
+			t2.setSkillFactor(pa_skillFactor);
+		} else {
+			t2.setSkillFactor(pb_skillFactor);
+		}
+
+		// Set factor rank to the worst one (Highest value)
+		ArrayList<Integer> fR = new ArrayList<>();
+		for (int i = 0; i < init.TaskNum; i++)
+			fR.add(state.population.subpops[0].individuals.length + 1);
+
+		t1.setFactorial_rank(fR);
+		t2.setFactorial_rank(fR);
+
+		// Set fitness of t1 and t2 for the task
+		ArrayList<Double> fitnessTa = new ArrayList<>();
+
+		if (state.generation > 0) {
+			t1.calculateSequenceFitness(t1.genome, init, state);
+			t1.evaluated = true;
+
+			for (int i = 0; i < init.TaskNum; i++)
+				if (i != t1.getSkillFactor())
+					fitnessTa.add(init.LIMIT);
+				else
+					fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
+		}
+
+		t1.setFitnessTask(fitnessTa);
+
+		fitnessTa = new ArrayList<>();
+
+		if (state.generation > 0) {
+			t2.calculateSequenceFitness(t2.genome, init, state);
+			t2.evaluated = true;
+
+			for (int i = 0; i < init.TaskNum; i++)
+				if (i != t2.getSkillFactor())
+					fitnessTa.add(init.LIMIT);
+				else
+					fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
+		}
+
+		t2.setFitnessTask(fitnessTa);
+
+		// update subpop with new individuals
+		inds[q] = t1;
+//			inds[q].evaluated = false;
+
+		if (q + 1 < inds.length) {
+			inds[q + 1] = t2;
+//				inds[q + 1].evaluated = false;
+		}
+
 	}
 
 	private void fillNewGenome(SequenceVectorIndividual parent, Service[] newGenome, Set<Service> newSection,

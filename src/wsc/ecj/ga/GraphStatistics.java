@@ -86,7 +86,7 @@ public class GraphStatistics extends SimpleShortStatistics {
 				bestSolution.set(ii, ind);
 			}
 
-			System.out.println("Generation:" + state.generation + ii + ": " + ind.getFitnessTask());
+			System.out.println("Task:" + state.generation + ii + ": " + ind.getFitnessTask());
 		}
 
 //		
