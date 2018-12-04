@@ -117,41 +117,39 @@ public class WSCAssortativeMating extends BreedingPipeline {
 		// Set fitness of t1 and t2 for the task
 		ArrayList<Double> fitnessTa = new ArrayList<>();
 
-		if (state.generation > 0) {
-			t1.calculateSequenceFitness(t1.genome, init, state);
-			t1.evaluated = true;
+//		if (state.generation > 0) {
+		t1.calculateSequenceFitness(t1.genome, init, state);
+		t1.evaluated = true;
 
-			for (int i = 0; i < init.TaskNum; i++)
-				if (i != t1.getSkillFactor())
-					fitnessTa.add(init.LIMIT);
-				else
-					fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
-		}
+		for (int i = 0; i < init.TaskNum; i++)
+			if (i != t1.getSkillFactor())
+				fitnessTa.add(init.LIMIT);
+			else
+				fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
+//		}
 
 		t1.setFitnessTask(fitnessTa);
 
 		fitnessTa = new ArrayList<>();
 
-		if (state.generation > 0) {
-			t2.calculateSequenceFitness(t2.genome, init, state);
-			t2.evaluated = true;
+//		if (state.generation > 0) {
+		t2.calculateSequenceFitness(t2.genome, init, state);
+		t2.evaluated = true;
 
-			for (int i = 0; i < init.TaskNum; i++)
-				if (i != t2.getSkillFactor())
-					fitnessTa.add(init.LIMIT);
-				else
-					fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
-		}
+		for (int i = 0; i < init.TaskNum; i++)
+			if (i != t2.getSkillFactor())
+				fitnessTa.add(init.LIMIT);
+			else
+				fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
+//		}
 
 		t2.setFitnessTask(fitnessTa);
 
 		// update subpop with new individuals
 		inds[q] = t1;
-		inds[q].evaluated = true;
 
 		if (q + 1 < inds.length) {
 			inds[q + 1] = t2;
-			inds[q + 1].evaluated = true;
 		}
 	}
 
@@ -230,41 +228,39 @@ public class WSCAssortativeMating extends BreedingPipeline {
 		// Set fitness of t1 and t2 for the task
 		ArrayList<Double> fitnessTa = new ArrayList<>();
 
-		if (state.generation > 0) {
-			t1.calculateSequenceFitness(t1.genome, init, state);
-			t1.evaluated = true;
+//		if (state.generation > 0) {
+		t1.calculateSequenceFitness(t1.genome, init, state);
+		t1.evaluated = true;
 
-			for (int i = 0; i < init.TaskNum; i++)
-				if (i != t1.getSkillFactor())
-					fitnessTa.add(init.LIMIT);
-				else
-					fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
-		}
+		for (int i = 0; i < init.TaskNum; i++)
+			if (i != t1.getSkillFactor())
+				fitnessTa.add(init.LIMIT);
+			else
+				fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
+//		}
 
 		t1.setFitnessTask(fitnessTa);
 
 		fitnessTa = new ArrayList<>();
 
-		if (state.generation > 0) {
-			t2.calculateSequenceFitness(t2.genome, init, state);
-			t2.evaluated = true;
+//		if (state.generation > 0) {
+		t2.calculateSequenceFitness(t2.genome, init, state);
+		t2.evaluated = true;
 
-			for (int i = 0; i < init.TaskNum; i++)
-				if (i != t2.getSkillFactor())
-					fitnessTa.add(init.LIMIT);
-				else
-					fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
-		}
+		for (int i = 0; i < init.TaskNum; i++)
+			if (i != t2.getSkillFactor())
+				fitnessTa.add(init.LIMIT);
+			else
+				fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
+//		}
 
 		t2.setFitnessTask(fitnessTa);
 
 		// update subpop with new individuals
 		inds[q] = t1;
-//			inds[q].evaluated = false;
 
 		if (q + 1 < inds.length) {
 			inds[q + 1] = t2;
-//				inds[q + 1].evaluated = false;
 		}
 
 	}
