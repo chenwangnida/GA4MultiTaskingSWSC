@@ -41,7 +41,7 @@ public class WSCProblem extends Problem implements SimpleProblemForm {
 		if (state.generation > 0) {
 			List<Double> ft = ind2.getFitnessTask();
 			for (int j = 0; j < init.TaskNum; j++) {
-				if (ft.get(subpopulation) == init.LIMIT) {
+				if (ft.get(j) == init.LIMIT) {
 					Task t = init.tasks.get(j);
 					ft.set(j, t.calculateFitness4Tasks(ind2, init));
 				}
