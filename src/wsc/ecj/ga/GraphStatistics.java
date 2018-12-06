@@ -71,22 +71,26 @@ public class GraphStatistics extends SimpleShortStatistics {
 	@Override
 	public void postEvaluationStatistics(EvolutionState state) {
 		WSCInitializer init = (WSCInitializer) state.initializer;
-		ArrayList<SequenceVectorIndividual> bestSolution = new ArrayList<SequenceVectorIndividual>();
 
 		updateRankPopulation(state, init);
 
-		// initial random best solutions
-		for (int i = 0; i < init.TaskNum; i++)
-			bestSolution.add((SequenceVectorIndividual) state.population.subpops[0].individuals[i]);
+		// initial random best solutions in generation 0
+		if (state.generation == 0) {
+			for (int i = 0; i < init.TaskNum; i++)
+				WSCInitializer.bestSolution.add((SequenceVectorIndividual) state.population.subpops[0].individuals[i]);
+		}
 
-		// update valid best solutions
+		// update valid best solutions in next generations
 		for (int ii = 0; ii < init.TaskNum; ii++) {
+			if (state.generation == 14) {
+			System.out.println("debug~");
+			}
 			SequenceVectorIndividual ind = getIndividualBestOfTask(ii, state.population.subpops[0].individuals);
-			if (bestSolution.get(ii).getFitnessTask().get(ii) < ind.getFitnessTask().get(ii)) {
-				bestSolution.set(ii, ind);
+			if (WSCInitializer.bestSolution.get(ii).getFitnessTask().get(ii) < ind.getFitnessTask().get(ii)) {
+				WSCInitializer.bestSolution.set(ii, ind);
 			}
 
-			System.out.println("Task:" + state.generation + ii + ": " + ind.getFitnessTask());
+			System.out.println("Generation:"+ state.generation+ " Task:" + ii + ": " + WSCInitializer.bestSolution.get(ii).getFitnessTask());
 		}
 
 //		

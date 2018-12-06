@@ -35,6 +35,7 @@ stat.file		                               = out.stat
 stat.do-time                                   = true
 stat.do-final                                  = true
 
+eval		            = wsc.ecj.ga.MultiTaskingEvaluator
 breed                   = wsc.ecj.ga.MultiTaskingBreeder
 
 

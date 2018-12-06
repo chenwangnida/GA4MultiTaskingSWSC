@@ -26,10 +26,11 @@ public class GoldSWSC extends Task{
 
 		double fitness4Gold;
 		// does individual violate the constrains
-		if (individual.getFitness_semantic() < init.GOLD) {
+		if (individual.getFitness_semantic() <= init.GOLD  && individual.getFitness_semantic() > init.SILVER ) {
 			fitness4Gold = 0.5 + 0.5 * individual.getFitnessVal();
 		} else {
-			double violation = (individual.getFitness_semantic() - init.GOLD) / (1 - init.GOLD);
+			
+			double violation = init.SILVER-individual.getFitness_semantic();
 			fitness4Gold = 0.5 * individual.getFitnessVal() - 0.5 * violation;
 		}
 		return fitness4Gold;

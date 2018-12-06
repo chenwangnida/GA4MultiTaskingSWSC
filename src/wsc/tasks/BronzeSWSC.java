@@ -27,10 +27,10 @@ public class BronzeSWSC extends Task {
 
 		double fitness4Bronze;
 		// does individual violate the constrains
-		if (individual.getFitness_semantic() < init.BRONZE) {
+		if (individual.getFitness_semantic() <= init.BRONZE && individual.getFitness_semantic() > 0) {
 			fitness4Bronze = 0.5 + 0.5 * individual.getFitnessVal();
 		} else {
-			double violation = (individual.getFitness_semantic() - init.BRONZE) / (1 - init.BRONZE);
+			double violation = individual.getFitness_semantic() - init.BRONZE;
 			fitness4Bronze = 0.5 * individual.getFitnessVal() - 0.5 * violation;
 		}
 		return fitness4Bronze;

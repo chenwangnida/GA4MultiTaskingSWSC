@@ -25,11 +25,21 @@ public class SilverSWSC extends Task {
 	public double calculateFitness4Tasks(SequenceVectorIndividual individual, WSCInitializer init) {
 
 		double fitness4Silver;
+
+		double violation;
 		// does individual violate the constrains
-		if (individual.getFitness_semantic() < init.SILVER) {
+		if (individual.getFitness_semantic() <= init.SILVER && individual.getFitness_semantic() > init.BRONZE) {
 			fitness4Silver = 0.5 + 0.5 * individual.getFitnessVal();
 		} else {
-			double violation = (individual.getFitness_semantic() - init.SILVER) / (1 - init.SILVER);
+
+			if (individual.getFitness_semantic() > init.SILVER) {
+				violation = individual.getFitness_semantic() - init.SILVER;
+
+			} else {
+				violation = init.BRONZE - individual.getFitness_semantic();
+
+			}
+
 			fitness4Silver = 0.5 * individual.getFitnessVal() - 0.5 * violation;
 		}
 		return fitness4Silver;

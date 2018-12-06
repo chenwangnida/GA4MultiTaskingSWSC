@@ -1,6 +1,7 @@
 package wsc.ecj.ga;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.google.common.collect.Lists;
 
@@ -57,6 +58,8 @@ public class MultiTaskingEvaluator extends SimpleEvaluator {
 	 * reduce the subpopulation to just the archive based on the scalar fitness.
 	 */
 	public Individual[] selectFittest(EvolutionState state, int subpop) {
+        Individual[] dummy = new Individual[0];
+
 
 		ArrayList<Individual> newSubpopulation = new ArrayList<Individual>();
 
@@ -67,15 +70,20 @@ public class MultiTaskingEvaluator extends SimpleEvaluator {
 
 			Double di1 = ((SequenceVectorIndividual) i1).getScalarFitness();
 			Double di2 = ((SequenceVectorIndividual) i2).getScalarFitness();
-			return di2.compareTo(di1);
+			return di1.compareTo(di2);
 		});
+		
+		Collections.reverse(listIndi);
 
 		int m = originalPopSize[subpop] - newSubpopulation.size();
 
 		for (int j = 0; j < m; j++)
 			newSubpopulation.add(listIndi.get(j));
 
-		Individual[] fittestMembers = (Individual[]) (newSubpopulation.toArray());
+		Individual[] fittestMembers = (Individual[]) (newSubpopulation.toArray(dummy));
+		
+//		 for(int i = 0 ; i < fittestMembers.length; i++)
+//			 fittestMembers[i].evaluated = false;
 
 		return fittestMembers;
 	}
