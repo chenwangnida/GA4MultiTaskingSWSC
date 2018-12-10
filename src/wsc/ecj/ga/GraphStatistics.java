@@ -92,47 +92,39 @@ public class GraphStatistics extends SimpleShortStatistics {
 
 			System.out.println("Generation:"+ state.generation+ " Task:" + ii + ": " + WSCInitializer.bestSolution.get(ii).getFitnessTask());
 		}
+		
+		//change output codes below
 
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//		
-//
 //		System.out.println("count it subpops size" + state.population.subpops.length);
-//
-//		boolean output = (state.generation % modulus == 0);
-//
-//		// gather timings
-//		// if (output && doTime)
-//		// {
-//		// state.output.print("" + (System.currentTimeMillis()-lastTime) + " ",
-//		// statisticslog);
-//		// }
-//
-//		// gather timings
-//		if (output && doTime) {
-//			long time = System.currentTimeMillis() - lastTime;
-//			if (state.generation == 0)
-//				time += WSCInitializer.setupTime;
-//			state.output.print("" + time + " ", statisticslog);
-//		}
-//
+
+		boolean output = (state.generation % modulus == 0);
+
+		// gather timings
+		// if (output && doTime)
+		// {
+		// state.output.print("" + (System.currentTimeMillis()-lastTime) + " ",
+		// statisticslog);
+		// }
+
+		// gather timings
+		if (output && doTime) {
+			long time = System.currentTimeMillis() - lastTime;
+			if (state.generation == 0)
+				time += WSCInitializer.setupTime;
+			state.output.print("" + time + " ", statisticslog);
+		}
+
 //		int subpops = state.population.subpops.length; // number of supopulations
 //		totalIndsThisGen = new long[subpops]; // total assessed individuals
 //		bestOfGeneration = new Individual[subpops]; // per-subpop best individual this generation
 //		totalSizeThisGen = new long[subpops]; // per-subpop total size of individuals this generation
 //		totalFitnessThisGen = new double[subpops]; // per-subpop mean fitness this generation
 //		double[] meanFitnessThisGen = new double[subpops]; // per-subpop mean fitness this generation
-//
-//		prepareStatistics(state);
-//
-//		// gather per-subpopulation statistics
-//
+
+		prepareStatistics(state);
+
+		// gather per-subpopulation statistics
+
 //		for (int x = 0; x < subpops; x++) {
 //			for (int y = 0; y < state.population.subpops[x].individuals.length; y++) {
 //				if (state.population.subpops[x].individuals[y].evaluated) // he's got a valid fitness
@@ -189,8 +181,8 @@ public class GraphStatistics extends SimpleShortStatistics {
 //			if (output && doSubpops)
 //				printExtraSubpopStatisticsAfter(state, x);
 //		}
-//
-//		// Now gather per-Population statistics
+
+		// Now gather per-Population statistics
 //		long popTotalInds = 0;
 //		long popTotalIndsSoFar = 0;
 //		long popTotalSize = 0;
@@ -240,31 +232,32 @@ public class GraphStatistics extends SimpleShortStatistics {
 //			state.output.print("" + (double) (popBestSoFar.size()) + " ", statisticslog); // size of best ind of pop so
 //																							// far
 //		}
-//
-//		// print out fitness info
-//		if (output) {
-//			state.output.print("" + popMeanFitness + " ", statisticslog); // mean fitness of pop this gen
-//			state.output.print("" + (popBestOfGeneration.fitness.fitness()) + " ", statisticslog); // best fitness of
-//																									// pop this gen
-//			state.output.print("" + (popBestSoFar.fitness.fitness()) + " ", statisticslog); // best fitness of pop so
-//																							// far
-//		}
-//
-//		// hook for KozaShortStatistics etc.
-//		if (output)
-//			printExtraPopStatisticsAfter(state);
-//
-//		// we're done!
-//		if (output)
-//			state.output.println("", statisticslog);
-//
-//		// Now let's write the histogram log
-//		if (output) {
-//			// Print the best candidate at the end of the run
-//			if (state.generation == state.parameters.getInt(new Parameter("generations"), null) - 1) {
-//				state.output.println(popBestSoFar.toString(), statisticslog);
-//			}
-//		}
+
+		// print out fitness info
+		if (output) {
+			state.output.print("" + (WSCInitializer.bestSolution.get(0).getFitnessTask().get(0)) + " ", statisticslog); // best fitness of task 1
+			state.output.print("" + (WSCInitializer.bestSolution.get(1).getFitnessTask().get(1)) + " ", statisticslog); // best fitness of task 2
+			state.output.print("" + (WSCInitializer.bestSolution.get(2).getFitnessTask().get(2)) + " ", statisticslog); // best fitness of task 3
+
+		}
+
+		// hook for KozaShortStatistics etc.
+		if (output)
+			printExtraPopStatisticsAfter(state);
+
+		// we're done!
+		if (output)
+			state.output.println("", statisticslog);
+
+		// Now let's write the histogram log
+		if (output) {
+			// Print the best candidate at the end of the run
+			if (state.generation == state.parameters.getInt(new Parameter("generations"), null) - 1) {
+				state.output.println(WSCInitializer.bestSolution.get(0).toString(), statisticslog);
+				state.output.println(WSCInitializer.bestSolution.get(1).toString(), statisticslog);
+				state.output.println(WSCInitializer.bestSolution.get(2).toString(), statisticslog);
+			}
+		}
 	}
 
 	SequenceVectorIndividual getIndividualBestOfTask(int task, Individual[] individuals) {
