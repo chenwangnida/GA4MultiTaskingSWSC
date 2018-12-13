@@ -16,63 +16,9 @@ public class GraphStatistics extends SimpleShortStatistics {
 	private static final long serialVersionUID = 1L;
 	public int histogramLog = 0; // 0 by default means stdout
 
-	void updateRankPopulation(EvolutionState state, WSCInitializer init) {
-
-		int nIndividual = state.population.subpops[0].individuals.length; // number of supopulations
-
-		ArrayList<ArrayList<SequenceVectorIndividual>> rankInTask = new ArrayList<>();
-
-		for (int i = 0; i < init.TaskNum; i++) {
-			ArrayList<SequenceVectorIndividual> lstIndividualInTask = new ArrayList<>();
-			rankInTask.add(lstIndividualInTask);
-		}
-
-		for (int i_in = 0; i_in < nIndividual; i_in++) {
-			SequenceVectorIndividual ind = (SequenceVectorIndividual) state.population.subpops[0].individuals[i_in];
-			for (int i = 0; i < init.TaskNum; i++) {
-				ArrayList<SequenceVectorIndividual> lstIndividualInTask = rankInTask.get(i);
-				boolean check = true;
-				for (int j = 0; j < lstIndividualInTask.size(); j++) {
-					if (lstIndividualInTask.get(j).getFitnessTask().get(i) < ind.getFitnessTask().get(i)) {
-						lstIndividualInTask.add(j, ind);
-						check = false;
-						break;
-					}
-				}
-				if (check) {
-					lstIndividualInTask.add(ind);
-				}
-				rankInTask.set(i, lstIndividualInTask);
-			}
-		}
-
-		for (int i = 0; i < nIndividual; i++) {
-			SequenceVectorIndividual ind = (SequenceVectorIndividual) state.population.subpops[0].individuals[i];
-
-			ArrayList<Integer> factorial_rank = new ArrayList<>();
-			int min_rank = nIndividual + 2;
-			int task_rank_min = -1;
-			for (int j = 0; j < init.TaskNum; j++) {
-				int rankJ = rankInTask.get(j).indexOf(ind) + 1;
-				factorial_rank.add(rankJ);
-				if (rankJ < min_rank) {
-					min_rank = rankJ;
-					task_rank_min = j;
-				}
-			}
-
-			ind.setFactorial_rank(factorial_rank);
-			ind.setSkillFactor(task_rank_min);
-			ind.setScalarFitness(1.0 / (min_rank));
-		}
-
-	}
-
 	@Override
 	public void postEvaluationStatistics(EvolutionState state) {
 		WSCInitializer init = (WSCInitializer) state.initializer;
-
-		updateRankPopulation(state, init);
 
 		// initial random best solutions in generation 0
 		if (state.generation == 0) {
