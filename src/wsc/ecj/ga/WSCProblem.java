@@ -31,7 +31,8 @@ public class WSCProblem extends Problem implements SimpleProblemForm {
 				fitnessTa.add(task.calculateFitness4Tasks(ind2, init));
 			}
 			ind2.setFitnessTask(fitnessTa);
-		}
+			
+			}
 
 	}
 

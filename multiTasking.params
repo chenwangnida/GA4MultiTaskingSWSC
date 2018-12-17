@@ -1,6 +1,11 @@
 parent.0		=  simple.params
 
 pop.subpop.0.size = 200
+#pop.subpop.0.size = 300
+
+threhold          = 67
+#threhold          = 100
+
 generations       = 100
 
 seed.0                                         = 1

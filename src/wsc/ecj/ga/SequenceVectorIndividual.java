@@ -32,11 +32,16 @@ public class SequenceVectorIndividual extends VectorIndividual {
 	// Multitasking attributes
 	List<Integer> factorial_rank;
 	private double scalarFitness;
-	private int skillFactor;
 	private double fitnessVal; // fitness value before penalizing violation of constrains
 	private List<Double> fitnessTask; // fitness values after before penalizing violation of constrains for each task
-	
-	private double fitness_semantic;  //MT+SIM with range (0,1]
+
+	// most effective task
+	private int skillFactor;
+	// list the effectiveness in ascending order from the most effective to the
+	// least effective
+	private List<Integer> skillFactorLevel;
+
+	private double fitness_semantic; // MT+SIM with range (0,1]
 
 	public double getAvailability() {
 		return availability;
@@ -142,13 +147,20 @@ public class SequenceVectorIndividual extends VectorIndividual {
 		this.fitnessVal = fitnessVal;
 	}
 
-	
 	public double getFitness_semantic() {
 		return fitness_semantic;
 	}
 
 	public void setFitness_semantic(double fitness_semantic) {
 		this.fitness_semantic = fitness_semantic;
+	}
+
+	public List<Integer> getSkillFactorLevel() {
+		return skillFactorLevel;
+	}
+
+	public void setSkillFactorLevel(List<Integer> skillFactorLevel) {
+		this.skillFactorLevel = skillFactorLevel;
 	}
 
 	@Override

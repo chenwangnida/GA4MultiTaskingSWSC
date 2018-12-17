@@ -88,6 +88,7 @@ public class WSCInitializer extends SimpleInitializer {
 	public static final double SILVER = 2/3.0;
 	public static final double GOLD = 1.0;
 	public static final double LIMIT = -10000000000.0;
+	public static int threhold;
 
 	// data
 	public static WSCRandom random;
@@ -129,6 +130,9 @@ public class WSCInitializer extends SimpleInitializer {
 		Parameter weight5Param = new Parameter("fitness-weight5");
 		Parameter weight6Param = new Parameter("fitness-weight6");
 		Parameter matingProbabilityParam = new Parameter("matingProbability");
+		Parameter threholdThrehold = new Parameter("threhold");
+
+		
 
 		String serviceFileName = state.parameters.getStringWithDefault(servicesParam, null, null);
 		String taskFileName = state.parameters.getStringWithDefault(taskParam, null, null);
@@ -141,6 +145,7 @@ public class WSCInitializer extends SimpleInitializer {
 		w5 = state.parameters.getDouble(weight5Param, null);
 		w6 = state.parameters.getDouble(weight6Param, null);
 		matingProbability = state.parameters.getDouble(matingProbabilityParam, null);
+		threhold = state.parameters.getInt(threholdThrehold, null);
 
 		try {
 			// register task
@@ -182,8 +187,7 @@ public class WSCInitializer extends SimpleInitializer {
 		tasks.add(new SilverSWSC());
 		tasks.add(new GoldSWSC());
 		
-		TaskNum =  tasks.size();
-		
+		TaskNum =  tasks.size();		
 
 
 		// Set size of genome
