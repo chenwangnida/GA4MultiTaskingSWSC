@@ -80,6 +80,7 @@ public class WSCInitializer extends SimpleInitializer {
 	public static double MAXINUM_SEMANTICDISTANCE = 1;
 
 	public static double matingProbability;
+	public static int hasLS;
 
 	// multi-tasks
     public static List<Task> tasks = new ArrayList<>();
@@ -131,7 +132,9 @@ public class WSCInitializer extends SimpleInitializer {
 		Parameter weight6Param = new Parameter("fitness-weight6");
 		Parameter matingProbabilityParam = new Parameter("matingProbability");
 		Parameter threholdThrehold = new Parameter("threhold");
+		Parameter LSProbabilityParam = new Parameter("LS");
 
+		
 		
 
 		String serviceFileName = state.parameters.getStringWithDefault(servicesParam, null, null);
@@ -146,6 +149,8 @@ public class WSCInitializer extends SimpleInitializer {
 		w6 = state.parameters.getDouble(weight6Param, null);
 		matingProbability = state.parameters.getDouble(matingProbabilityParam, null);
 		threhold = state.parameters.getInt(threholdThrehold, null);
+		hasLS = state.parameters.getInt(LSProbabilityParam, null);
+
 
 		try {
 			// register task

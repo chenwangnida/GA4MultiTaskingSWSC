@@ -6,7 +6,12 @@ pop.subpop.0.size = 200
 threhold          = 67
 #threhold          = 100
 
+# 0 no local search , 1 allows local search
+LS 	              = 1
+
 generations       = 100
+matingProbability							   = 0.3
+
 
 seed.0                                         = 1
 composition-task                               = problem.xml
@@ -21,7 +26,6 @@ fitness-weight4                                = 0.125
 fitness-weight5                                = 0.125
 fitness-weight6                                = 0.125
 
-matingProbability							   = 0.9
 
 #stat.evaluations                               = $eval.stat
 #stat.eval-sample-rate                          = 30

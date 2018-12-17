@@ -28,18 +28,18 @@ public class GraphStatistics extends SimpleShortStatistics {
 
 		// update valid best solutions in next generations
 		for (int ii = 0; ii < init.TaskNum; ii++) {
-			if (state.generation == 14) {
-			System.out.println("debug~");
-			}
-			SequenceVectorIndividual ind = getIndividualBestOfTask(ii, state.population.subpops[0].individuals);
-			if (WSCInitializer.bestSolution.get(ii).getFitnessTask().get(ii) < ind.getFitnessTask().get(ii)) {
-				WSCInitializer.bestSolution.set(ii, ind);
-			}
 
+			SequenceVectorIndividual ind = getIndividualBestOfTask(ii, state.population.subpops[0].individuals);
+			if (ind != null) {
+				if (WSCInitializer.bestSolution.get(ii).getFitnessTask().get(ii) < ind.getFitnessTask().get(ii)) {
+					WSCInitializer.bestSolution.set(ii, ind);
+				}
+
+			}
 //			System.out.println("Generation:"+ state.generation+ " Task:" + ii + ": " + WSCInitializer.bestSolution.get(ii).getFitnessTask());
 		}
-		
-		//change output codes below
+
+		// change output codes below
 
 //		System.out.println("count it subpops size" + state.population.subpops.length);
 
@@ -181,9 +181,13 @@ public class GraphStatistics extends SimpleShortStatistics {
 
 		// print out fitness info
 		if (output) {
-			state.output.print("" + (WSCInitializer.bestSolution.get(0).getFitnessTask().get(0)) + " ", statisticslog); // best fitness of task 1
-			state.output.print("" + (WSCInitializer.bestSolution.get(1).getFitnessTask().get(1)) + " ", statisticslog); // best fitness of task 2
-			state.output.print("" + (WSCInitializer.bestSolution.get(2).getFitnessTask().get(2)) + " ", statisticslog); // best fitness of task 3
+			for (int i = 0; i < init.TaskNum; i++) {
+				state.output.print("" + (WSCInitializer.bestSolution.get(i).getFitnessTask().get(i)) + " ",
+						statisticslog); // best fitness of task 1
+
+			}
+//			state.output.print("" + (WSCInitializer.bestSolution.get(1).getFitnessTask().get(1)) + " ", statisticslog); // best fitness of task 2
+//			state.output.print("" + (WSCInitializer.bestSolution.get(2).getFitnessTask().get(2)) + " ", statisticslog); // best fitness of task 3
 
 		}
 
@@ -199,9 +203,13 @@ public class GraphStatistics extends SimpleShortStatistics {
 		if (output) {
 			// Print the best candidate at the end of the run
 			if (state.generation == state.parameters.getInt(new Parameter("generations"), null) - 1) {
-				state.output.println(WSCInitializer.bestSolution.get(0).toString(), statisticslog);
-				state.output.println(WSCInitializer.bestSolution.get(1).toString(), statisticslog);
-				state.output.println(WSCInitializer.bestSolution.get(2).toString(), statisticslog);
+
+				for (int i = 0; i < init.TaskNum; i++) {
+					state.output.println(WSCInitializer.bestSolution.get(i).toString(), statisticslog);
+
+				}
+//				state.output.println(WSCInitializer.bestSolution.get(1).toString(), statisticslog);
+//				state.output.println(WSCInitializer.bestSolution.get(2).toString(), statisticslog);
 			}
 		}
 	}
