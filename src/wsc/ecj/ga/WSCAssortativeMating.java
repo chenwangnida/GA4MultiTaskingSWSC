@@ -117,35 +117,10 @@ public class WSCAssortativeMating extends BreedingPipeline {
 		t2.setFactorial_rank(fR);
 
 		// Set fitness of t1 and t2 for the task
-		ArrayList<Double> fitnessTa = new ArrayList<>();
 
-//		if (state.generation > 0) {
-		t1.calculateSequenceFitness(t1.genome, init, state);
-		t1.evaluated = true;
+		setFitness(init, state, t1);
 
-		for (int i = 0; i < init.TaskNum; i++)
-			if (i != t1.getSkillFactor())
-				fitnessTa.add(init.LIMIT);
-			else
-				fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t1, init));
-//		}
-
-		t1.setFitnessTask(fitnessTa);
-
-		fitnessTa = new ArrayList<>();
-
-//		if (state.generation > 0) {
-		t2.calculateSequenceFitness(t2.genome, init, state);
-		t2.evaluated = true;
-
-		for (int i = 0; i < init.TaskNum; i++)
-			if (i != t2.getSkillFactor())
-				fitnessTa.add(init.LIMIT);
-			else
-				fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(t2, init));
-//		}
-
-		t2.setFitnessTask(fitnessTa);
+		setFitness(init, state, t2);
 
 		// update subpop with new individuals
 		inds[q] = t1;
@@ -228,37 +203,11 @@ public class WSCAssortativeMating extends BreedingPipeline {
 		t2.setFactorial_rank(fR);
 
 		// Set fitness of t1 and t2 for the task
-		ArrayList<Double> fitnessTa = new ArrayList<>();
+		// Set fitness of t1 and t2 for the task
 
-//		if (state.generation > 0) {
-		t1.calculateSequenceFitness(t1.genome, init, state);
-		t1.evaluated = true;
+		setFitness(init, state, t1);
 
-		if (init.hasLS == 0) {
-			setFitnessTask4OneTask(fitnessTa, t1, init);
-
-		} else if (init.hasLS == 1) {
-
-			setFitnessTask4NeighborTask(fitnessTa, t1, init);
-
-		} else if (init.hasLS == 10) {
-			setFitnessTaskAllTask(fitnessTa, t1, init);
-		}
-
-		fitnessTa = new ArrayList<>();
-
-//		if (state.generation > 0) {
-		t2.calculateSequenceFitness(t2.genome, init, state);
-		t2.evaluated = true;
-
-		if (init.hasLS == 0) {
-			setFitnessTask4OneTask(fitnessTa, t2, init);
-		} else if (init.hasLS == 1) {
-			setFitnessTask4NeighborTask(fitnessTa, t2, init);
-
-		} else if (init.hasLS == 10) {
-			setFitnessTaskAllTask(fitnessTa, t2, init);
-		}
+		setFitness(init, state, t2);
 
 		// update subpop with new individuals
 		inds[q] = t1;
@@ -269,7 +218,23 @@ public class WSCAssortativeMating extends BreedingPipeline {
 
 	}
 
-	private void setFitnessTask4OneTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init) {
+	private void setFitness(WSCInitializer init, EvolutionState state, SequenceVectorIndividual indi) {
+
+		ArrayList<Double> fitnessTa = new ArrayList<>();
+
+		if (init.hasLS == 0) {
+			setFitnessTask4OneTask(fitnessTa, indi, init, state);
+		} else if (init.hasLS == 1) {
+			setFitnessTask4NeighborTask(fitnessTa, indi, init, state);
+
+		} else if (init.hasLS == 10) {
+			setFitnessTaskAllTask(fitnessTa, indi, init, state);
+		}
+
+	}
+
+	private void setFitnessTask4OneTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init,
+			EvolutionState state) {
 
 		for (int i = 0; i < init.TaskNum; i++)
 			if (i != indi.getSkillFactor())
@@ -282,7 +247,8 @@ public class WSCAssortativeMating extends BreedingPipeline {
 
 	}
 
-	private void setFitnessTaskAllTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init) {
+	private void setFitnessTaskAllTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init,
+			EvolutionState state) {
 
 		for (int i = 0; i < init.TaskNum; i++) {
 			fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(indi, init));
@@ -292,9 +258,10 @@ public class WSCAssortativeMating extends BreedingPipeline {
 
 	}
 
-	private void setFitnessTask4NeighborTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init) {
+	private void setFitnessTask4NeighborTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init,
+			EvolutionState state) {
 
-		setFitnessTask4OneTask(fitnessTa, indi, init);
+		setFitnessTask4OneTask(fitnessTa, indi, init, state);
 
 		int currentindex = indi.getSkillFactor();
 

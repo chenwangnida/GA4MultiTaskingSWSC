@@ -7,10 +7,10 @@ threhold          = 50
 #threhold          = 100
 
 # 0 no local search , 1 allows local search,10 allows all tasks to be compulated 
-LS 	              = 10
+LS 	              = 1
 
 generations       = 100
-matingProbability							   = 0.3
+matingProbability							   = 0.95
 
 
 seed.0                                         = 1
