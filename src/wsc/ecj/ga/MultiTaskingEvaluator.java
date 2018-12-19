@@ -66,11 +66,14 @@ public class MultiTaskingEvaluator extends SimpleEvaluator {
 		}
 
 		// test for see number of taskskill in generations
-		printSizeOfSkillPop(state, init);
+//		printSizeOfSkillPop(state, init);
 
 	}
 
 	private void printSizeOfSkillPop(EvolutionState state, WSCInitializer init) {
+		if(state.generation == 55) {
+			System.out.println("dehug");
+		}
 		ArrayList<ArrayList<SequenceVectorIndividual>> pops4SkillFactors = Lists.newArrayList();
 
 		for (int i = 0; i < init.TaskNum; i++) {
@@ -84,7 +87,7 @@ public class MultiTaskingEvaluator extends SimpleEvaluator {
 		}
 
 		System.out.println(pops4SkillFactors.get(0).size() + ";"
-				+ (pops4SkillFactors.get(1).size() + ";" + pops4SkillFactors.get(2).size()));
+				+ (pops4SkillFactors.get(1).size() + ";" + pops4SkillFactors.get(2).size()+";"+pops4SkillFactors.get(3).size()));
 	}
 
 	private Individual[] realignment4SkillFactor(EvolutionState state, WSCInitializer init) {

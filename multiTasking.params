@@ -3,11 +3,11 @@ parent.0		=  simple.params
 pop.subpop.0.size = 200
 #pop.subpop.0.size = 300
 
-threhold          = 67
+threhold          = 50
 #threhold          = 100
 
-# 0 no local search , 1 allows local search
-LS 	              = 1
+# 0 no local search , 1 allows local search,10 allows all tasks to be compulated 
+LS 	              = 10
 
 generations       = 100
 matingProbability							   = 0.3

@@ -34,6 +34,7 @@ import ec.simple.SimpleInitializer;
 import ec.util.Parameter;
 import wsc.tasks.BronzeSWSC;
 import wsc.tasks.GoldSWSC;
+import wsc.tasks.PlatinumSWSC;
 import wsc.tasks.SilverSWSC;
 import wsc.tasks.Task;
 import wsc.InitialWSCPool;
@@ -85,9 +86,10 @@ public class WSCInitializer extends SimpleInitializer {
 	// multi-tasks
     public static List<Task> tasks = new ArrayList<>();
 	public static int TaskNum = 0;
-	public static final double BRONZE = 1/3.0;
-	public static final double SILVER = 2/3.0;
-	public static final double GOLD = 1.0;
+	public static final double BRONZE = 0.25;
+	public static final double SILVER = 0.50;
+	public static final double GOLD = 0.75;
+	public static final double PLATINUM = 1.0;
 	public static final double LIMIT = -10000000000.0;
 	public static int threhold;
 
@@ -191,6 +193,8 @@ public class WSCInitializer extends SimpleInitializer {
 		tasks.add(new BronzeSWSC());
 		tasks.add(new SilverSWSC());
 		tasks.add(new GoldSWSC());
+		tasks.add(new PlatinumSWSC());
+
 		
 		TaskNum =  tasks.size();		
 

@@ -19,21 +19,31 @@ import wsc.ecj.ga.WSCInitializer;
 import wsc.graph.ServiceEdge;
 import wsc.graph.ServiceGraph;
 
-public class GoldSWSC extends Task{
+public class GoldSWSC extends Task {
 
 	@Override
 	public double calculateFitness4Tasks(SequenceVectorIndividual individual, WSCInitializer init) {
 
 		double fitness4Gold;
+
+		double violation;
 		// does individual violate the constrains
-		if (individual.getFitness_semantic() <= init.GOLD  && individual.getFitness_semantic() > init.SILVER ) {
+		if (individual.getFitness_semantic() <= init.GOLD && individual.getFitness_semantic() > init.SILVER) {
 			fitness4Gold = 0.5 + 0.5 * individual.getFitnessVal();
 		} else {
-			
-			double violation = init.SILVER-individual.getFitness_semantic();
+
+			if (individual.getFitness_semantic() > init.GOLD) {
+				violation = individual.getFitness_semantic() - init.GOLD;
+
+			} else {
+				violation = init.SILVER - individual.getFitness_semantic();
+
+			}
+
 			fitness4Gold = 0.5 * individual.getFitnessVal() - 0.5 * violation;
 		}
 		return fitness4Gold;
+
 	}
 
 }

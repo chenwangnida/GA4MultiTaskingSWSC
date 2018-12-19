@@ -237,10 +237,12 @@ public class WSCAssortativeMating extends BreedingPipeline {
 		if (init.hasLS == 0) {
 			setFitnessTask4OneTask(fitnessTa, t1, init);
 
-		} else {
+		} else if (init.hasLS == 1) {
 
 			setFitnessTask4NeighborTask(fitnessTa, t1, init);
 
+		} else if (init.hasLS == 10) {
+			setFitnessTaskAllTask(fitnessTa, t1, init);
 		}
 
 		fitnessTa = new ArrayList<>();
@@ -251,9 +253,11 @@ public class WSCAssortativeMating extends BreedingPipeline {
 
 		if (init.hasLS == 0) {
 			setFitnessTask4OneTask(fitnessTa, t2, init);
-		} else {
+		} else if (init.hasLS == 1) {
 			setFitnessTask4NeighborTask(fitnessTa, t2, init);
 
+		} else if (init.hasLS == 10) {
+			setFitnessTaskAllTask(fitnessTa, t2, init);
 		}
 
 		// update subpop with new individuals
@@ -278,22 +282,32 @@ public class WSCAssortativeMating extends BreedingPipeline {
 
 	}
 
+	private void setFitnessTaskAllTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init) {
+
+		for (int i = 0; i < init.TaskNum; i++) {
+			fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(indi, init));
+		}
+
+		indi.setFitnessTask(fitnessTa);
+
+	}
+
 	private void setFitnessTask4NeighborTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init) {
 
 		setFitnessTask4OneTask(fitnessTa, indi, init);
-		
+
 		int currentindex = indi.getSkillFactor();
 
 		int neghborIndex1 = currentindex - 1;
 		int neghborIndex2 = currentindex + 1;
 
-		if (neghborIndex1 < 3 && neghborIndex1 >= 0) {
+		if (neghborIndex1 < init.TaskNum && neghborIndex1 >= 0) {
 
 			fitnessTa.set(neghborIndex1, init.tasks.get(neghborIndex1).calculateFitness4Tasks(indi, init));
 
 		}
 
-		if (neghborIndex2 < 3 && neghborIndex2 >= 0) {
+		if (neghborIndex2 < init.TaskNum && neghborIndex2 >= 0) {
 
 			fitnessTa.set(neghborIndex2, init.tasks.get(neghborIndex2).calculateFitness4Tasks(indi, init));
 
