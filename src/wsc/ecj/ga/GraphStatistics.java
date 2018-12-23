@@ -2,6 +2,8 @@ package wsc.ecj.ga;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.Lists;
+
 import ec.EvolutionState;
 import ec.Individual;
 import ec.simple.SimpleShortStatistics;
@@ -30,13 +32,22 @@ public class GraphStatistics extends SimpleShortStatistics {
 		for (int ii = 0; ii < init.TaskNum; ii++) {
 
 			SequenceVectorIndividual ind = getIndividualBestOfTask(ii, state.population.subpops[0].individuals);
+
 			if (ind != null) {
-				if (WSCInitializer.bestSolution.get(ii).getFitnessTask().get(ii) < ind.getFitnessTask().get(ii)) {
-					WSCInitializer.bestSolution.set(ii, ind);
+				SequenceVectorIndividual indColoed = new SequenceVectorIndividual();
+
+				ArrayList coloedFitness4Task = Lists.newArrayList(ind.getFitnessTask());
+				indColoed.setFitnessTask(coloedFitness4Task);
+				indColoed.setScalarFitness(ind.getScalarFitness());
+				indColoed.setSkillFactor(ind.getSkillFactor());
+				indColoed.setStrRepresentation(ind.getStrRepresentation());
+
+				if (WSCInitializer.bestSolution.get(ii).getFitnessTask().get(ii) < indColoed.getFitnessTask().get(ii)) {
+					WSCInitializer.bestSolution.set(ii, indColoed);
 				}
 
 			}
-//			System.out.println("Generation:"+ state.generation+ " Task:" + ii + ": " + WSCInitializer.bestSolution.get(ii).getFitnessTask());
+//					System.out.println("Generation:"+ state.generation+ " Task:" + ii + ": " + WSCInitializer.bestSolution.get(ii).getFitnessTask());
 		}
 
 		// change output codes below

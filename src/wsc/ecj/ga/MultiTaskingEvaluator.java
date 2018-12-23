@@ -61,9 +61,9 @@ public class MultiTaskingEvaluator extends SimpleEvaluator {
 			state.population.subpops[x].individuals = selectFittest(state, x);
 
 		// realign skill factor of individuals
-		if (state.generation == 0) {
+//		if (state.generation == 0) {
 //			state.population.subpops[0].individuals = realignment4SkillFactor(state, init);
-		}
+//		}
 
 		// test for see number of taskskill in generations
 //		printSizeOfSkillPop(state, init);
@@ -71,9 +71,6 @@ public class MultiTaskingEvaluator extends SimpleEvaluator {
 	}
 
 	private void printSizeOfSkillPop(EvolutionState state, WSCInitializer init) {
-		if(state.generation == 55) {
-			System.out.println("dehug");
-		}
 		ArrayList<ArrayList<SequenceVectorIndividual>> pops4SkillFactors = Lists.newArrayList();
 
 		for (int i = 0; i < init.TaskNum; i++) {
@@ -86,8 +83,8 @@ public class MultiTaskingEvaluator extends SimpleEvaluator {
 			pops4SkillFactors.get(vectorIndi.getSkillFactor()).add(vectorIndi);
 		}
 
-		System.out.println(pops4SkillFactors.get(0).size() + ";"
-				+ (pops4SkillFactors.get(1).size() + ";" + pops4SkillFactors.get(2).size()+";"+pops4SkillFactors.get(3).size()));
+		System.out.println(pops4SkillFactors.get(0).size() + ";" + (pops4SkillFactors.get(1).size() + ";"
+				+ pops4SkillFactors.get(2).size() + ";" + pops4SkillFactors.get(3).size()));
 	}
 
 	private Individual[] realignment4SkillFactor(EvolutionState state, WSCInitializer init) {
@@ -224,18 +221,18 @@ public class MultiTaskingEvaluator extends SimpleEvaluator {
 			ind.setSkillFactor(task_rank_min);
 			ind.setScalarFitness(1.0 / (min_rank));
 
-			if (state.generation == 0) {// set skill factorial level
-				ArrayList<Integer> factorial_rank4sort = Lists.newArrayList(factorial_rank);
-				Collections.sort(factorial_rank4sort);
-
-				ArrayList<Integer> skillFactorlevel = Lists.newArrayList();
-				for (int level : factorial_rank4sort) {
-					int skillFactor = factorial_rank.indexOf(level);
-					skillFactorlevel.add(skillFactor);
-				}
-
-				ind.setSkillFactorLevel(skillFactorlevel);
-			}
+//			if (state.generation == 0) {// set skill factorial level
+//				ArrayList<Integer> factorial_rank4sort = Lists.newArrayList(factorial_rank);
+//				Collections.sort(factorial_rank4sort);
+//
+//				ArrayList<Integer> skillFactorlevel = Lists.newArrayList();
+//				for (int level : factorial_rank4sort) {
+//					int skillFactor = factorial_rank.indexOf(level);
+//					skillFactorlevel.add(skillFactor);
+//				}
+//
+//				ind.setSkillFactorLevel(skillFactorlevel);
+//			}
 		}
 
 	}

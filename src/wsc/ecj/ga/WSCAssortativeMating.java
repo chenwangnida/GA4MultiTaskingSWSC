@@ -62,11 +62,11 @@ public class WSCAssortativeMating extends BreedingPipeline {
 		double rand = init.random.nextDouble();
 
 		for (int q = start, x = 0; q < nMin + start; q++, x++) {
+
 			SequenceVectorIndividual t1 = ((SequenceVectorIndividual) inds1[x]);
 			SequenceVectorIndividual t2 = ((SequenceVectorIndividual) inds2[x]);
+
 			if ((t1.getSkillFactor() == t2.getSkillFactor()) || (rand < init.matingProbability)) { // Perform crossover
-//			if ((t1.getSkillFactor() == t2.getSkillFactor())
-//					|| (rand < (init.matingProbability + 0.01 * state.generation))) { // Perform crossover
 
 				crossover(q, init, state, inds, t1, t2);
 
@@ -115,12 +115,6 @@ public class WSCAssortativeMating extends BreedingPipeline {
 
 		t1.setFactorial_rank(fR);
 		t2.setFactorial_rank(fR);
-
-		// Set fitness of t1 and t2 for the task
-
-		setFitness(init, state, t1);
-
-		setFitness(init, state, t2);
 
 		// update subpop with new individuals
 		inds[q] = t1;
@@ -202,13 +196,6 @@ public class WSCAssortativeMating extends BreedingPipeline {
 		t1.setFactorial_rank(fR);
 		t2.setFactorial_rank(fR);
 
-		// Set fitness of t1 and t2 for the task
-		// Set fitness of t1 and t2 for the task
-
-		setFitness(init, state, t1);
-
-		setFitness(init, state, t2);
-
 		// update subpop with new individuals
 		inds[q] = t1;
 
@@ -216,71 +203,6 @@ public class WSCAssortativeMating extends BreedingPipeline {
 			inds[q + 1] = t2;
 		}
 
-	}
-
-	private void setFitness(WSCInitializer init, EvolutionState state, SequenceVectorIndividual indi) {
-
-		ArrayList<Double> fitnessTa = new ArrayList<>();
-
-		if (init.hasLS == 0) {
-			setFitnessTask4OneTask(fitnessTa, indi, init, state);
-		} else if (init.hasLS == 1) {
-			setFitnessTask4NeighborTask(fitnessTa, indi, init, state);
-
-		} else if (init.hasLS == 10) {
-			setFitnessTaskAllTask(fitnessTa, indi, init, state);
-		}
-
-	}
-
-	private void setFitnessTask4OneTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init,
-			EvolutionState state) {
-
-		for (int i = 0; i < init.TaskNum; i++)
-			if (i != indi.getSkillFactor())
-				fitnessTa.add(init.LIMIT);
-			else
-				fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(indi, init));
-//		}
-
-		indi.setFitnessTask(fitnessTa);
-
-	}
-
-	private void setFitnessTaskAllTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init,
-			EvolutionState state) {
-
-		for (int i = 0; i < init.TaskNum; i++) {
-			fitnessTa.add(init.tasks.get(i).calculateFitness4Tasks(indi, init));
-		}
-
-		indi.setFitnessTask(fitnessTa);
-
-	}
-
-	private void setFitnessTask4NeighborTask(ArrayList fitnessTa, SequenceVectorIndividual indi, WSCInitializer init,
-			EvolutionState state) {
-
-		setFitnessTask4OneTask(fitnessTa, indi, init, state);
-
-		int currentindex = indi.getSkillFactor();
-
-		int neghborIndex1 = currentindex - 1;
-		int neghborIndex2 = currentindex + 1;
-
-		if (neghborIndex1 < init.TaskNum && neghborIndex1 >= 0) {
-
-			fitnessTa.set(neghborIndex1, init.tasks.get(neghborIndex1).calculateFitness4Tasks(indi, init));
-
-		}
-
-		if (neghborIndex2 < init.TaskNum && neghborIndex2 >= 0) {
-
-			fitnessTa.set(neghborIndex2, init.tasks.get(neghborIndex2).calculateFitness4Tasks(indi, init));
-
-		}
-
-		indi.setFitnessTask(fitnessTa);
 	}
 
 	private void fillNewGenome(SequenceVectorIndividual parent, Service[] newGenome, Set<Service> newSection,

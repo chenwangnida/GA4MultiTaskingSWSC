@@ -1,5 +1,7 @@
 package wsc.ecj.ga;
 
+import com.google.common.collect.ObjectArrays;
+
 import ec.BreedingPipeline;
 import ec.EvolutionState;
 import ec.Individual;
@@ -33,26 +35,19 @@ public class MultiTaskingBreeder extends SimpleBreeder {
 		Population oldPop = (Population) state.population;
 		Population newPop = (Population) state.population.emptyClone();
 
-//		Population newPop = super.breedPopulation(state);
-
 		Individual[] oldInds = oldPop.subpops[0].individuals;
 		Individual[] newInds = new Individual[oldPop.subpops[0].individuals.length];
-		newPop.subpops[0].individuals = newInds;
 
 		// do regular breeding of this subpopulation
 		BreedingPipeline bp = (BreedingPipeline) newPop.subpops[0].species.pipe_prototype;
 
-		for (int start = 0; start < state.population.subpops[0].individuals.length; start += 2) {
+		for (int start = 0; start < newInds.length; start += 2) {
 			bp.produce(1, 1, start, 0, newInds, state, 0);
 		}
 
-		Individual[] combinedInds = new Individual[oldPop.subpops[0].individuals.length
-				+ newPop.subpops[0].individuals.length];
-		System.arraycopy(newPop.subpops[0].individuals, 0, combinedInds, 0, newPop.subpops[0].individuals.length);
-		System.arraycopy(oldPop.subpops[0].individuals, 0, combinedInds, newPop.subpops[0].individuals.length,
-				oldPop.subpops[0].individuals.length);
-		newPop.subpops[0].individuals = combinedInds;
+		Individual[] combinedInds = ObjectArrays.concat(oldInds, newInds, Individual.class);
 
+		newPop.subpops[0].individuals = combinedInds;
 		return newPop;
 
 	}
