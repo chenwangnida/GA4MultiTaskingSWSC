@@ -190,9 +190,9 @@ public class WSCInitializer extends SimpleInitializer {
 		eval = new WSCEvaluation();
 
 		//Initial tasks
-//		tasks.add(new BronzeSWSC());
-//		tasks.add(new SilverSWSC());
-//		tasks.add(new GoldSWSC());
+		tasks.add(new BronzeSWSC());
+		tasks.add(new SilverSWSC());
+		tasks.add(new GoldSWSC());
 		tasks.add(new PlatinumSWSC());
 
 		

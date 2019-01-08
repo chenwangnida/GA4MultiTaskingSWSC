@@ -5,9 +5,9 @@ pop.subpop.0.size = 30
 threhold          = 50
 
 # 0 no local search , 1 allows local search,10 allows all tasks to be compulated 
-LS 	              =  1
+LS 	              =  0
 
-generations       = 100
+generations       = 200
 matingProbability							   = 0.3
 
 
@@ -52,8 +52,11 @@ pop.subpop.0.species.pipe.num-sources          = 1
 pop.subpop.0.species.pipe.source.0             = wsc.ecj.ga.WSCAssortativeMating
 pop.subpop.0.species.pipe.source.0.prob        = 1.0
 pop.subpop.0.species.pipe.source.0.num-sources = 2
-pop.subpop.0.species.pipe.source.0.source.0	   = wsc.ecj.ga.MultiTaskingSelection
-pop.subpop.0.species.pipe.source.0.source.1	   = wsc.ecj.ga.MultiTaskingSelection
+pop.subpop.0.species.pipe.source.0.source.0	   = ec.select.RandomSelection
+pop.subpop.0.species.pipe.source.0.source.1	   = ec.select.RandomSelection
+
+#pop.subpop.0.species.pipe.source.0.source.0	   = wsc.ecj.ga.MultiTaskingSelection
+#pop.subpop.0.species.pipe.source.0.source.1	   = wsc.ecj.ga.MultiTaskingSelection
 #breed.elite-fraction.0 = 0.25
 breed.elite.0                                  = 2
 select.tournament.size                         = 2
